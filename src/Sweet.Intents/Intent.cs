@@ -1,9 +1,9 @@
 using System.Numerics;
 using Silk.NET.GLFW;
 
-namespace input;
+namespace Sweet.Intents;
 
-public unsafe static class Input
+public unsafe static class Intent
 {
     private static WindowHandle* window;
     private static Glfw glfw;
@@ -98,6 +98,6 @@ public unsafe static class Input
     {
         var state = (InputAction)glfw.GetMouseButton(window, (int)button);
 
-        return InputAction.Press == state || InputAction.Repeat == state; 
+        return InputAction.Press == state || InputAction.Repeat == state;
     }
 }

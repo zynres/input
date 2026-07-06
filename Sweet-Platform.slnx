@@ -1,0 +1,4 @@
+<Solution>
+    <Project Path="src/Sweet.Device/Sweet.Device.csproj" />
+    <Project Path="src/Sweet.Intent/Sweet.Intent.csproj" />
+</Solution>
