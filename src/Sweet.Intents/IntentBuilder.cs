@@ -7,34 +7,53 @@ namespace Sweet.Intents;
 
 public unsafe struct IntentBuilder : IDisposable
 {
-    internal UnsafeList<UnsafeList<Actions.Action>> Keys;
+    internal UnsafeList<KeyBinding> Keys;
 
-    public System.Action KickBack;
+    internal Action KickBack;
 
     public IntentBuilder()
     {
-        Keys = new UnsafeList<UnsafeList<Actions.Action>>(348);
+        Keys = new UnsafeList<KeyBinding>(348);
 
         for (uint i = 0; i < Keys.Capacity; i++)
         {
-            Keys.Add(new UnsafeList<Actions.Action>(2));
+            Keys.Add(new()
+            {
+                Actions = new(),
+                Axes = new()
+            });
         }
 
         for (uint i = 0; i < (uint)MouseButton.Button8; i++)
         {
-            Keys.Add(new UnsafeList<Actions.Action>(2));
+            Keys[i] = new()
+            {
+                Actions = new(),
+                Axes = new()
+            };
         }
     }
 
-    internal void Bind(Keys key, ActionState* actionState, byte index)
+    internal void Bind(Keys key, ActionState* state, byte index)
     {
-        Keys[(uint)key].Add(new Actions.Action(actionState, index));
+        Keys[(uint)key].Actions.Add(new(state, index));
     }
 
-    internal void Bind(MouseButton key, ActionState* actionState, byte index)
+    internal void Bind(MouseButton key, ActionState* state, byte index)
     {
-        Keys[(uint)key].Add(new Actions.Action(actionState, index));
+        Keys[(uint)key].Actions.Add(new(state, index));
     }
+
+    internal void Bind(Keys key, AxisState* state, bool isPositive)
+    {
+        Keys[(uint)key].Axes.Add(new(state, isPositive));
+    }
+
+    internal void Bind(MouseButton key, AxisState* state, bool isPositive)
+    {
+        Keys[(uint)key].Axes.Add(new(state, isPositive));
+    }
+
 
     internal void UnBind(Keys key, ActionState* actionState)
     {
@@ -46,11 +65,22 @@ public unsafe struct IntentBuilder : IDisposable
 
     }
 
+    internal void UnBind(Keys key, AxisState* state, bool isPositive)
+    {
+        Keys[(uint)key].Axes.Add(new(state, isPositive));
+    }
+
+    internal void UnBind(MouseButton key, AxisState* state, bool isPositive)
+    {
+        Keys[(uint)key].Axes.Add(new(state, isPositive));
+    }
+
     public void Dispose()
     {
         for (uint i = 0; i < Keys.Length; i++)
         {
-            Keys[i].Dispose();
+            Keys[i].Actions.Dispose();
+            Keys[i].Axes.Dispose();
         }
 
         Keys.Dispose();

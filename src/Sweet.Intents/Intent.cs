@@ -1,10 +1,8 @@
 // Copyright © 2026 Zynres.
 
-using Sweet.Collections.Unsafe.List;
 using Sweet.Intents.Generated;
 using Sweet.Intents.Actions;
 using Sweet.Intents.Axes;
-using System.Numerics;
 using Silk.NET.GLFW;
 
 namespace Sweet.Intents;
@@ -25,72 +23,52 @@ public unsafe static class Intent
         EditorCameraIntents.Build(ref builder);
 
         glfw.SetKeyCallback(window, KeyCallback);
+        glfw.SetMouseButtonCallback(window, MouseCallback);
     }
 
     private static void KeyCallback(WindowHandle* window, Keys key, int scanCode, InputAction inputAction, KeyModifiers mods)
     {
-        ref UnsafeList<Actions.Action> actions = ref builder.Keys[(uint)key];
+        ref readonly KeyBinding binding = ref builder.Keys[(uint)key];
+        ProcessBinding(in binding, inputAction, key.ToString());
+    }
 
-        if (inputAction == InputAction.Press)
+    private static void MouseCallback(WindowHandle* window, MouseButton key, InputAction inputAction, KeyModifiers mods)
+    {
+        ref readonly KeyBinding binding = ref builder.Keys[(uint)key];
+        ProcessBinding(in binding, inputAction, key.ToString());
+    }
+
+    private static void ProcessBinding(in KeyBinding binding, InputAction inputAction, string key)
+    {
+        switch (inputAction)
         {
-            for (uint i = 0; i < actions.Length; i++)
-            {
-                ref Actions.Action action = ref actions[i];
+            case InputAction.Press:
+                binding.ProcessHeld(in key);
+                break;
+            case InputAction.Release:
+                binding.ProcessRelease(in key);
+                break;
+            default:
 
-                if (!action.IsDowned)
-                {
-                    ref Clause clause = ref action.State->Clauses[action.ClauseIndex];
-
-                    action.IsDowned = true;
-
-                    bool wasActive = clause.IsSatisfied;
-
-                    clause.Current++;
-
-                    if (!wasActive && clause.IsSatisfied)
-                        action.State->SatisfiedClauses++;
-
-                    Console.WriteLine();
-                    Console.WriteLine($"Downed Key: {key}");
-                    Console.WriteLine($"current: {clause.Current}");
-                    Console.WriteLine($"active: {action.State->SatisfiedClauses}");
-                }
-            }
+                break;
         }
-        else if (inputAction == InputAction.Release)
-        {
-            for (uint i = 0; i < actions.Length; i++)
-            {
-                ref Actions.Action action = ref actions[i];
+    }
 
-                if (action.IsDowned)
-                {
-                    ref Clause clause = ref action.State->Clauses[action.ClauseIndex];
+    public static void KickBackInvoke() => builder.KickBack?.Invoke();
 
-                    action.IsDowned = false;
+    public static ref float GetAxis(AxisState* state)
+    {
+        return ref state->Value;
+    }
 
-                    bool wasActive = clause.IsSatisfied;
+    public static bool IsHeld(ActionState* state)
+    {
+        return state->IsHeld;
+    }
 
-                    clause.Current--;
-
-                    if (wasActive && !clause.IsSatisfied)
-                        action.State->SatisfiedClauses--;
-
-                    Console.WriteLine();
-                    Console.WriteLine($"Upped Key: {key}");
-                    Console.WriteLine($"current: {clause.Current}");
-                    Console.WriteLine($"active: {action.State->SatisfiedClauses}");
-                }
-            }
-        }
-        else if (inputAction == InputAction.Repeat)
-        {
-
-        }
-        else
-        {
-
-        }
+    public static bool IsRelease(ActionState* state)
+    {
+        return true; //actionState->IsRelease;
     }
 
     public static bool IsDown(Keys key)
@@ -98,48 +76,37 @@ public unsafe static class Intent
         return InputAction.Press == (InputAction)glfw.GetKey(window, key);
     }
 
-    public static bool IsUp(Keys key)
-    {
-        return InputAction.Release == (InputAction)glfw.GetKey(window, key);
-    }
-
-    public static bool IsPressed(Keys key)
+    public static bool IsHeld(Keys key)
     {
         var state = (InputAction)glfw.GetKey(window, key);
 
         return InputAction.Press == state || InputAction.Repeat == state;
     }
 
-    private static void MouseCallback()
+    public static bool IsRelease(Keys key)
     {
-
+        return InputAction.Release == (InputAction)glfw.GetKey(window, key);
     }
 
-    public static ref Vector2 GetAxis(AxisState* axisState)
+    public static bool IsDown(MouseButton button)
     {
-        return ref axisState->Value;
+        var state = (InputAction)glfw.GetMouseButton(window, (int)button);
+
+        return InputAction.Press == state;
     }
 
-    public static bool IsDown(ActionState* actionState)
-    {
-        return actionState->IsDown;
-    }
-
-    /*public static bool IsUp(ActionState* actionState)
-    {
-        return actionState->Up.IsKey;
-    }
-
-    public static bool IsPressed(ActionState* actionState)
-    {
-        return actionState->Pressed.IsKey;
-    }*/
-
-    public static bool IsMouse(MouseButton button)
+    public static bool IsHeld(MouseButton button)
     {
         var state = (InputAction)glfw.GetMouseButton(window, (int)button);
 
         return InputAction.Press == state || InputAction.Repeat == state;
+    }
+
+    public static bool IsRelease(MouseButton button)
+    {
+        var state = (InputAction)glfw.GetMouseButton(window, (int)button);
+
+        return InputAction.Release == state;
     }
 
     public static void Dispose()
