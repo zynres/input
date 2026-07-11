@@ -22,16 +22,16 @@ public unsafe struct MouseDevice
     {
         glfw.GetCursorPos(window, out double x, out double y);
 
-        if (Intent.IsHeld(MouseButton.Right) && (x < 0 || x > Size.X || y < 0 || y > Size.Y))
+        if (Intent.IsHeld(MouseButton.Right) && (x <= 1 || x > Size.X - 5 || y < 0 || y > Size.Y - 1))
         {
-            if (x < 0)
-                x = Size.X;
-            if (x > Size.X)
-                x = 0;
+            if (x <= 1)
+                x = Size.X - 5;
+            if (x > Size.X - 5)
+                x = 2;
 
             if (y < 0)
-                y = Size.Y;
-            if (y > Size.Y)
+                y = Size.Y - 1;
+            if (y > Size.Y - 1)
                 y = 0;
 
             glfw.SetCursorPos(window, x, y);
