@@ -1,6 +1,6 @@
-using Sweet.Collections.Unsafe.List;
+using SweetLib.Collections.Unsafe.List;
 
-namespace Sweet.Intents.Actions;
+namespace SweetLib.Intents.Actions;
 
 public struct ActionState : IDisposable
 {

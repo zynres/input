@@ -1,4 +1,4 @@
-namespace Sweet.Intents.Axes;
+namespace SweetLib.Intents.Axes;
 
 [Flags]
 public enum AxisFlags : byte

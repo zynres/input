@@ -1,19 +1,19 @@
 // Copyright © 2026 Zynres.
 
-using Sweet.Intents.Generated;
-using Sweet.Intents.Actions;
-using Sweet.Intents.Axes;
+using SweetLib.Intents.Generated;
+using SweetLib.Intents.Actions;
+using SweetLib.Intents.Axes;
 using Silk.NET.GLFW;
 
-namespace Sweet.Intents;
+namespace SweetLib.Intents;
 
-public unsafe static class Intent
+public unsafe struct Intent
 {
-    private static IntentBuilder builder;
-    private static WindowHandle* window;
-    private static Glfw glfw;
+    private IntentBuilder builder;
+    private WindowHandle* window;
+    private Glfw glfw;
 
-    public static void Init(WindowHandle* _window, Glfw _glfw)
+    public void Init(WindowHandle* _window, Glfw _glfw)
     {
         window = _window;
         glfw = _glfw;
@@ -26,19 +26,19 @@ public unsafe static class Intent
         glfw.SetMouseButtonCallback(window, MouseCallback);
     }
 
-    private static void KeyCallback(WindowHandle* window, Keys key, int scanCode, InputAction inputAction, KeyModifiers mods)
+    private void KeyCallback(WindowHandle* window, Keys key, int scanCode, InputAction inputAction, KeyModifiers mods)
     {
         ref readonly KeyBinding binding = ref builder.Keys[(uint)key];
         ProcessBinding(in binding, inputAction, key.ToString());
     }
 
-    private static void MouseCallback(WindowHandle* window, MouseButton key, InputAction inputAction, KeyModifiers mods)
+    private void MouseCallback(WindowHandle* window, MouseButton key, InputAction inputAction, KeyModifiers mods)
     {
         ref readonly KeyBinding binding = ref builder.Keys[(uint)key];
         ProcessBinding(in binding, inputAction, key.ToString());
     }
 
-    private static void ProcessBinding(in KeyBinding binding, InputAction inputAction, string key)
+    private void ProcessBinding(in KeyBinding binding, InputAction inputAction, string key)
     {
         switch (inputAction)
         {
@@ -54,62 +54,57 @@ public unsafe static class Intent
         }
     }
 
-    public static void KickBackInvoke() => builder.KickBack?.Invoke();
+    public void KickBackInvoke() => builder.KickBack?.Invoke();
 
     public static ref float GetAxis(AxisState* state)
     {
         return ref state->Value;
     }
 
-    public static bool IsHeld(ActionState* state)
+    public bool IsHeld(ActionState* state)
     {
         return state->IsHeld;
     }
 
-    public static bool IsRelease(ActionState* state)
-    {
-        return true; //actionState->IsRelease;
-    }
-
-    public static bool IsDown(Keys key)
+    public bool IsDown(Keys key)
     {
         return InputAction.Press == (InputAction)glfw.GetKey(window, key);
     }
 
-    public static bool IsHeld(Keys key)
+    public bool IsHeld(Keys key)
     {
         var state = (InputAction)glfw.GetKey(window, key);
 
         return InputAction.Press == state || InputAction.Repeat == state;
     }
 
-    public static bool IsRelease(Keys key)
+    public readonly bool IsRelease(Keys key)
     {
         return InputAction.Release == (InputAction)glfw.GetKey(window, key);
     }
 
-    public static bool IsDown(MouseButton button)
+    public readonly bool IsDown(MouseButton button)
     {
         var state = (InputAction)glfw.GetMouseButton(window, (int)button);
 
         return InputAction.Press == state;
     }
 
-    public static bool IsHeld(MouseButton button)
+    public readonly bool IsHeld(MouseButton button)
     {
         var state = (InputAction)glfw.GetMouseButton(window, (int)button);
 
         return InputAction.Press == state || InputAction.Repeat == state;
     }
 
-    public static bool IsRelease(MouseButton button)
+    public readonly bool IsRelease(MouseButton button)
     {
         var state = (InputAction)glfw.GetMouseButton(window, (int)button);
 
         return InputAction.Release == state;
     }
 
-    public static void Dispose()
+    public void Dispose()
     {
         builder.Dispose();
     }

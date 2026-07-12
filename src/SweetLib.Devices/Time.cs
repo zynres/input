@@ -1,6 +1,6 @@
 using Silk.NET.GLFW;
 
-namespace Sweet.Devices;
+namespace SweetLib.Devices;
 
 public struct Time
 {

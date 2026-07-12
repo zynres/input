@@ -1,8 +1,8 @@
-using Sweet.Collections.Unsafe.List;
-using Sweet.Intents.Actions;
-using Sweet.Intents.Axes;
+using SweetLib.Collections.Unsafe.List;
+using SweetLib.Intents.Actions;
+using SweetLib.Intents.Axes;
 
-namespace Sweet.Intents;
+namespace SweetLib.Intents;
 
 internal unsafe struct KeyBinding
 {

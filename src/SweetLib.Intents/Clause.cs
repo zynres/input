@@ -1,4 +1,4 @@
-namespace Sweet.Intents;
+namespace SweetLib.Intents;
 
 public struct Clause
 {

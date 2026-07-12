@@ -1,11 +1,11 @@
 // auto-generated
 
 using System.Runtime.InteropServices;
-using Sweet.Intents.Actions;
-using Sweet.Intents.Axes;
+using SweetLib.Intents.Actions;
+using SweetLib.Intents.Axes;
 using Silk.NET.GLFW;
 
-namespace Sweet.Intents.Generated;
+namespace SweetLib.Intents.Generated;
 
 /// <summary>
 ///     this code was automatically generated from the .intents sourse file

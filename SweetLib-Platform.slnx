@@ -1,0 +1,4 @@
+<Solution>
+    <Project Path="src/SweetLib.Devices/SweetLib.Devices.csproj" />
+    <Project Path="src/SweetLib.Intents/SweetLib.Intents.csproj" />
+</Solution>

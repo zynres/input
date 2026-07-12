@@ -1,7 +1,7 @@
 using System.Numerics;
 using Silk.NET.GLFW;
 
-namespace Sweet.Devices;
+namespace SweetLib.Devices;
 
 public unsafe struct WindowDevice
 {

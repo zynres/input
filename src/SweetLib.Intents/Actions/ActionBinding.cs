@@ -1,4 +1,4 @@
-namespace Sweet.Intents.Actions;
+namespace SweetLib.Intents.Actions;
 
 public unsafe struct ActionBinding
 {
