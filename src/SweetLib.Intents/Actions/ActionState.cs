@@ -2,7 +2,7 @@ using SweetLib.Collections.Unsafe.List;
 
 namespace SweetLib.Intents.Actions;
 
-public struct ActionState : IDisposable
+public struct ActionState
 {
     public UnsafeList<Clause> Clauses;
 

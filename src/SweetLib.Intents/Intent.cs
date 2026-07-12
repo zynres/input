@@ -56,22 +56,22 @@ public unsafe struct Intent
 
     public void KickBackInvoke() => builder.KickBack?.Invoke();
 
-    public static ref float GetAxis(AxisState* state)
+    public readonly ref float GetAxis(AxisState* state)
     {
         return ref state->Value;
     }
 
-    public bool IsHeld(ActionState* state)
+    public readonly bool IsHeld(ActionState* state)
     {
         return state->IsHeld;
     }
 
-    public bool IsDown(Keys key)
+    public readonly bool IsDown(Keys key)
     {
         return InputAction.Press == (InputAction)glfw.GetKey(window, key);
     }
 
-    public bool IsHeld(Keys key)
+    public readonly bool IsHeld(Keys key)
     {
         var state = (InputAction)glfw.GetKey(window, key);
 

@@ -5,7 +5,7 @@ using Silk.NET.GLFW;
 
 namespace SweetLib.Intents;
 
-public unsafe struct IntentBuilder : IDisposable
+public unsafe struct IntentBuilder
 {
     internal UnsafeList<KeyBinding> Keys;
 
