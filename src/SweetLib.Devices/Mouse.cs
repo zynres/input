@@ -17,11 +17,11 @@ public unsafe struct Mouse
         SetMousePosition(glfw, window, new Vector2(Size.X / 2, Size.Y / 2));
     }
 
-    internal void WrapCursor(Glfw glfw, WindowHandle* window, in Vector2 Size, in Intent intent)
+    internal void WrapCursor(Glfw glfw, WindowHandle* window, in Vector2 Size)
     {
         glfw.GetCursorPos(window, out double x, out double y);
 
-        if (intent.IsHeld(MouseButton.Right) && (x <= 1 || x > Size.X - 5 || y < 0 || y > Size.Y - 1))
+        if (Input.IsHeld(MouseButton.Right) && (x <= 1 || x > Size.X - 5 || y < 0 || y > Size.Y - 1))
         {
             if (x <= 1)
                 x = Size.X - 5;

@@ -10,13 +10,10 @@ namespace SweetLib.Intents;
 public unsafe struct Intent
 {
     private IntentBuilder builder;
-    private WindowHandle* window;
-    private Glfw glfw;
-
-    public void Init(WindowHandle* _window, Glfw _glfw)
-    {
-        window = _window;
-        glfw = _glfw;
+    
+    public void Init(WindowHandle* window, Glfw glfw)
+    {    
+        Input.Init(window, glfw);
 
         builder = new();
 
@@ -64,44 +61,6 @@ public unsafe struct Intent
     public readonly bool IsHeld(ActionState* state)
     {
         return state->IsHeld;
-    }
-
-    public readonly bool IsDown(Keys key)
-    {
-        return InputAction.Press == (InputAction)glfw.GetKey(window, key);
-    }
-
-    public readonly bool IsHeld(Keys key)
-    {
-        var state = (InputAction)glfw.GetKey(window, key);
-
-        return InputAction.Press == state || InputAction.Repeat == state;
-    }
-
-    public readonly bool IsRelease(Keys key)
-    {
-        return InputAction.Release == (InputAction)glfw.GetKey(window, key);
-    }
-
-    public readonly bool IsDown(MouseButton button)
-    {
-        var state = (InputAction)glfw.GetMouseButton(window, (int)button);
-
-        return InputAction.Press == state;
-    }
-
-    public readonly bool IsHeld(MouseButton button)
-    {
-        var state = (InputAction)glfw.GetMouseButton(window, (int)button);
-
-        return InputAction.Press == state || InputAction.Repeat == state;
-    }
-
-    public readonly bool IsRelease(MouseButton button)
-    {
-        var state = (InputAction)glfw.GetMouseButton(window, (int)button);
-
-        return InputAction.Release == state;
     }
 
     public void Dispose()

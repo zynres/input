@@ -29,12 +29,12 @@ public unsafe struct Device
         return context;
     }
 
-    public void Update(Glfw glfw, in Intent intent)
+    public void Update(Glfw glfw)
     {
         Time.Update(glfw);
         
         Window.UpdateWindowSize(glfw, window);
 
-        Mouse.WrapCursor(glfw, window, in Window.Size, in intent);
+        Mouse.WrapCursor(glfw, window, in Window.Size);
     }
 }
