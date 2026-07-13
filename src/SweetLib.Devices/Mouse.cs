@@ -11,14 +11,20 @@ public unsafe struct Mouse
 
     internal Vector2 _lastPosition;
 
-    internal void Init(Glfw glfw, WindowHandle* window, in Vector2 Size)
+    internal void Init(in Vector2 Size)
     {
+        var window = GraphicContext.Window;
+        var glfw = GraphicContext.Glfw;
+
         glfw.SetInputMode(window, CursorStateAttribute.Cursor, CursorModeValue.CursorNormal);
         SetMousePosition(glfw, window, new Vector2(Size.X / 2, Size.Y / 2));
     }
 
-    internal void WrapCursor(Glfw glfw, WindowHandle* window, in Vector2 Size)
+    internal void WrapCursor(in Vector2 Size)
     {
+        var window = GraphicContext.Window;
+        var glfw = GraphicContext.Glfw;
+        
         glfw.GetCursorPos(window, out double x, out double y);
 
         if (Input.IsHeld(MouseButton.Right) && (x <= 1 || x > Size.X - 5 || y < 0 || y > Size.Y - 1))

@@ -9,21 +9,21 @@ public unsafe struct Window
 {
     public Vector2 Size;
 
-    internal GraphicContext Init(short width, short height)
+    internal void Init(short width, short height)
     {
         Size = new(width, height);
         
-        return CreateWindow();
+        CreateWindow();
     }
 
-    internal void UpdateWindowSize(Glfw glfw, WindowHandle* window)
+    internal void UpdateWindowSize()
     {
-        glfw.GetWindowSize(window, out int width, out int height);
+        GraphicContext.Glfw.GetWindowSize(GraphicContext.Window, out int width, out int height);
 
         Size = new Vector2(width, height);
     }
 
-    private GraphicContext CreateWindow()
+    private void CreateWindow()
     {
         SetupDisplayBackend();
 
@@ -45,12 +45,7 @@ public unsafe struct Window
         glfw.MakeContextCurrent(window);
         glfw.SetWindowOpacity(window, 1f);
 
-        return new GraphicContext() 
-        { 
-            GL = GL.GetApi(glfw.GetProcAddress), 
-            Window = window,
-            Glfw = glfw 
-        };
+        GraphicContext.Init(window, glfw, GL.GetApi(glfw.GetProcAddress));
     }
 
     private readonly void SetupDisplayBackend()

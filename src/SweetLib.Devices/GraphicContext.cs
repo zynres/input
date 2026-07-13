@@ -3,9 +3,16 @@ using Silk.NET.OpenGL;
 
 namespace SweetLib.Devices;
 
-public unsafe struct GraphicContext
+public unsafe static class GraphicContext
 {
-    public WindowHandle* Window;
-    public Glfw Glfw; 
-    public GL GL;
+    public static WindowHandle* Window;
+    public static Glfw Glfw; 
+    public static GL GL;
+
+    public static void Init(WindowHandle* window, Glfw glfw, GL gl)
+    {
+        Window = window;
+        Glfw = glfw;
+        GL = gl;
+    }
 }

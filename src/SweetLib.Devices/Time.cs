@@ -9,9 +9,9 @@ public struct Time
 
     internal float _last;
 
-    internal void Update(Glfw glfw)
+    internal void Update()
     {
-        Current = (float)glfw.GetTime();
+        Current = (float)GraphicContext.Glfw.GetTime();
         Delta = Current - _last;
         _last = Current;
     }
